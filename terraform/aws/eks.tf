@@ -24,7 +24,7 @@ resource aws_iam_role "iam_for_eks" {
     git_file             = "terraform/aws/eks.tf"
     git_last_modified_at = "2020-06-16 14:46:24"
     git_last_modified_by = "nimrodkor@gmail.com"
-    git_modifiers        = "nimrodkor"
+    git_modifiers        = "chaystenz"
     git_org              = "bridgecrewio"
     git_repo             = "terragoat"
     yor_trace            = "de052596-21a0-43de-8153-469add277b18"
