@@ -66,9 +66,9 @@ resource "azurerm_network_interface" "ni_win" {
   }
 }
 
-resource azurerm_network_security_group "bad_sg" {
+resource "azurerm_network_security_group" "bad_sg1" {
   location            = var.location
-  name                = "terragoat-${var.environment}"
+  name                = "terragoat-${var.environment}-bad_sg1"
   resource_group_name = azurerm_resource_group.example.name
 
   security_rule {
@@ -76,7 +76,7 @@ resource azurerm_network_security_group "bad_sg" {
     direction                  = "Inbound"
     name                       = "AllowSSH"
     priority                   = 200
-    protocol                   = "TCP"
+    protocol                   = "Tcp"
     source_address_prefix      = "*"
     source_port_range          = "*"
     destination_port_range     = "22-22"
@@ -88,7 +88,7 @@ resource azurerm_network_security_group "bad_sg" {
     direction                  = "Inbound"
     name                       = "AllowRDP"
     priority                   = 300
-    protocol                   = "TCP"
+    protocol                   = "Tcp"
     source_address_prefix      = "*"
     source_port_range          = "*"
     destination_port_range     = "3389-3389"
@@ -106,7 +106,27 @@ resource azurerm_network_security_group "bad_sg" {
   }
 }
 
-resource azurerm_network_watcher "network_watcher" {
+resource "azurerm_network_security_group" "bad_sg2" {
+  location            = var.location
+  name                = "terragoat-${var.environment}-bad-sg2"
+  resource_group_name = azurerm_resource_group.example.name
+}
+
+resource "azurerm_network_security_rule" "bad_rule1" {
+  name                        = "AllowRDP"
+  access                      = "Allow"
+  direction                   = "Inbound"
+  priority                    = 300
+  protocol                    = "Tcp"
+  source_address_prefix       = "*"
+  source_port_range           = "*"
+  destination_port_range      = "3389-3389"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.example.name
+  network_security_group_name = azurerm_network_security_group.bad_sg2.name
+}
+
+resource "azurerm_network_watcher" "network_watcher" {
   location            = var.location
   name                = "terragoat-network-watcher-${var.environment}"
   resource_group_name = azurerm_resource_group.example.name
@@ -122,9 +142,10 @@ resource azurerm_network_watcher "network_watcher" {
   }
 }
 
-resource azurerm_network_watcher_flow_log "flow_log" {
+resource "azurerm_network_watcher_flow_log" "flow_log" {
+  name                      = "terragoat-network-watcher-flow-log-${var.environment}"
   enabled                   = false
-  network_security_group_id = azurerm_network_security_group.bad_sg.id
+  network_security_group_id = azurerm_network_security_group.bad_sg1.id
   network_watcher_name      = azurerm_network_watcher.network_watcher.name
   resource_group_name       = azurerm_resource_group.example.name
   storage_account_id        = azurerm_storage_account.example.id
