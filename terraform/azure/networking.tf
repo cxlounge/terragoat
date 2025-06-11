@@ -113,7 +113,21 @@ resource "azurerm_network_security_group" "bad_sg2" {
 }
 
 resource "azurerm_network_security_rule" "bad_rule1" {
-  name                        = "AllowRDP"
+  name                        = "AllowSSH"
+  access                      = "Allow"
+  direction                   = "Inbound"
+  priority                    = 200
+  protocol                    = "Tcp"
+  source_address_prefix       = "*"
+  source_port_range           = "*"
+  destination_port_range      = "22-22"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.example.name
+  network_security_group_name = azurerm_network_security_group.bad_sg2.name
+}
+
+resource "azurerm_network_security_rule" "bad_rule2" {
+  name                        = "AllowSSH"
   access                      = "Allow"
   direction                   = "Inbound"
   priority                    = 300
