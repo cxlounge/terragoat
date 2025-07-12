@@ -80,7 +80,7 @@ aws s3api put-bucket-encryption --bucket $TERRAGOAT_STATE_BUCKET --server-side-e
   ]
 }'
 ```
-
+ 
 #### Apply TerraGoat (AWS)
 
 ```bash
